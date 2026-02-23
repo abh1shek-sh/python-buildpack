@@ -752,7 +752,7 @@ func (s *Supplier) InstallCommonBuildDependencies() error {
 	// 	s.Log.Warning("Could not install flit_core from PyPI: %v. Continuing anyway...", err)
 	// }
 
-	var commonDeps = []string{"flit","wheel", "setuptools"}
+	var commonDeps = []string{"flit_core","wheel", "setuptools"}
 	tempPath := filepath.Join("/tmp", "common_build_deps")
 	if err := s.Installer.InstallOnlyVersion("pip", tempPath); err != nil {
 		return err
