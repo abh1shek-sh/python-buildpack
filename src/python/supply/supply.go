@@ -752,7 +752,6 @@ func (s *Supplier) InstallCommonBuildDependencies() error {
 	}
 
 	var commonDeps = []string{"wheel", "setuptools"}
-	tempPath := filepath.Join("/tmp", "common_build_deps")
 	if err := s.Installer.InstallOnlyVersion("pip", tempPath); err != nil {
 		return err
 	}
