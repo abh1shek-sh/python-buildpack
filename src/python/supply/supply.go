@@ -746,9 +746,10 @@ func (s *Supplier) RunPipVendored() error {
 // from PyPI since it's a pure Python package with no build dependencies.
 func (s *Supplier) InstallCommonBuildDependencies() error {
 	// Before the loop
-if err := s.runPipInstall("flit_core", "--no-deps", "--upgrade", "--target="+tempPath); err != nil {
-    return fmt.Errorf("could not download flit_core: %v", err)
-}
+	tempPath := filepath.Join("/tmp", "common_build_deps")
+	if err := s.runPipInstall("flit_core", "--no-deps", "--upgrade", "--target="+tempPath); err != nil {
+    	return fmt.Errorf("could not download flit_core: %v", err)
+	}
 
 	var commonDeps = []string{"wheel", "setuptools"}
 	tempPath := filepath.Join("/tmp", "common_build_deps")
