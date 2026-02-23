@@ -747,12 +747,12 @@ func (s *Supplier) RunPipVendored() error {
 func (s *Supplier) InstallCommonBuildDependencies() error {
 	// Install flit_core first from PyPI (needed to build wheel >= 0.40)
 	// flit_core is a pure Python wheel with no build dependencies
-	s.Log.Info("Installing flit_core from PyPI (required to build wheel)")
-	if err := s.runPipInstall("flit"); err != nil {
-		s.Log.Warning("Could not install flit_core from PyPI: %v. Continuing anyway...", err)
-	}
+	// s.Log.Info("Installing flit_core from PyPI (required to build wheel)")
+	// if err := s.runPipInstall("flit"); err != nil {
+	// 	s.Log.Warning("Could not install flit_core from PyPI: %v. Continuing anyway...", err)
+	// }
 
-	var commonDeps = []string{"wheel", "setuptools"}
+	var commonDeps = []string{"flit","wheel", "setuptools"}
 	tempPath := filepath.Join("/tmp", "common_build_deps")
 	if err := s.Installer.InstallOnlyVersion("pip", tempPath); err != nil {
 		return err
