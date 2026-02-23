@@ -742,7 +742,16 @@ func (s *Supplier) RunPipVendored() error {
 // for vendored apps with sdists, we install the 2 most common build-time
 // dependencies - wheel and setuptools. These are packaged by the dependency
 // pipeline within the "pip" dependency.
+// NOTE: flit_core is required to build wheel >= 0.40. We install it first
+// from PyPI since it's a pure Python package with no build dependencies.
 func (s *Supplier) InstallCommonBuildDependencies() error {
+	// Install flit_core first from PyPI (needed to build wheel >= 0.40)
+	// flit_core is a pure Python wheel with no build dependencies
+	s.Log.Info("Installing flit_core from PyPI (required to build wheel)")
+	if err := s.runPipInstall("flit_core>=3.8,<4"); err != nil {
+		s.Log.Warning("Could not install flit_core from PyPI: %v. Continuing anyway...", err)
+	}
+
 	var commonDeps = []string{"wheel", "setuptools"}
 	tempPath := filepath.Join("/tmp", "common_build_deps")
 	if err := s.Installer.InstallOnlyVersion("pip", tempPath); err != nil {
