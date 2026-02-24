@@ -745,9 +745,9 @@ func (s *Supplier) RunPipVendored() error {
 // NOTE: flit_core is required to build wheel >= 0.40. We install it first
 // from PyPI since it's a pure Python package with no build dependencies.
 func (s *Supplier) InstallCommonBuildDependencies() error {
-	// Before the loop
+	
 	tempPath := filepath.Join("/tmp", "common_build_deps")
-	if err := s.runPipInstall("flit_core", "--no-deps", "--upgrade", "--target="+tempPath); err != nil {
+	if err := s.runPipDownload("flit_core", "--no-deps", "--dest", tempPath); err != nil {
     	return fmt.Errorf("could not download flit_core: %v", err)
 	}
 
@@ -885,6 +885,12 @@ func (s *Supplier) runPipInstall(args ...string) error {
 	installCmd := append(append(pipCommand(), "install"), args...)
 	s.Log.Info(strings.Join(installCmd, " "))
 	return s.Command.Execute(s.Stager.BuildDir(), indentWriter(os.Stdout), indentWriter(os.Stderr), installCmd[0], installCmd[1:]...)
+}
+
+func (s *Supplier) runPipDownload(args ...string) error {
+    downloadCmd := append(append(pipCommand(), "download"), args...)
+    s.Log.Info(strings.Join(downloadCmd, " "))
+    return s.Command.Execute(s.Stager.BuildDir(), indentWriter(os.Stdout), indentWriter(os.Stderr), downloadCmd[0], downloadCmd[1:]...)
 }
 
 func (s *Supplier) formatVersion(version string) string {
